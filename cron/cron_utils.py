@@ -7,7 +7,8 @@ class CronUtils:
     @staticmethod
     def generate_cron_job(values):
         python_path = sys.executable
-        do_backup_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../core/do_backup.py")
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        do_backup_path = os.path.join(project_root, "core", "do_backup.py")
         schedule = f"{values['minute']} {values['hour']} {values['day']} {values['month']} {values['weekday']}"
         return f"{schedule} {python_path} {do_backup_path}"
 

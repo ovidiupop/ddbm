@@ -28,10 +28,10 @@
         "backup_instances": "4"
     },
     "cron_settings": {
-        "minute": "2",
-        "hour": "1",
-        "day": "*",
-        "month": "*",
-        "weekday": "*"
+        "minute": "*",
+        "hour": "6",
+        "day": "4",
+        "month": "6",
+        "weekday": "6"
     }
 }

@@ -51,13 +51,9 @@ class CronGeneratorWindow(BaseWindow):
     def create_button_frame(self):
         button_frame, _, _ = super().create_button_frame()
 
-        self.generate_button = ttk.Button(button_frame, text="Generate", command=self.generate_cron,
-                                          style='Primary.TButton')
-        self.generate_button.grid(row=0, column=0, padx=(0, 5), sticky="w")
-
         self.open_crontab_button = ttk.Button(button_frame, text="Open Crontab", command=self.open_crontab,
                                               style='Primary.TButton')
-        self.open_crontab_button.grid(row=0, column=1, padx=5, sticky="w")
+        self.open_crontab_button.grid(row=0, column=0, padx=(0, 5), sticky="w")
 
     def load_config(self):
         config = load_config()
