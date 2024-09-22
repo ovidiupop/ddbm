@@ -24,9 +24,8 @@
         }
     },
     "app_settings": {
-        "script_path": "/home/matricks/db_backups_app/db_backups.sh",
         "backup_folder": "/home/matricks/db_backups",
-        "backup_instances": 4
+        "backup_instances": "4"
     },
     "cron_settings": {
         "minute": "2",

@@ -1,8 +1,7 @@
 import os
 import sys
 import subprocess
-from ui.dialog_utils import show_error, show_info
-
+from tkinter import messagebox
 
 class CronUtils:
     @staticmethod
@@ -27,11 +26,12 @@ class CronUtils:
                 if CronUtils.open_terminal_command(command):
                     return
 
-            show_info(parent_window, "Crontab", "Could not automatically open the crontab editor. "
-                                                "Please open a terminal manually and run the command 'crontab -e'.")
+            messagebox.showinfo("Crontab", "Could not automatically open the crontab editor. "
+                                           "Please open a terminal manually and run the command 'crontab -e'.",
+                                parent=parent_window)
 
         except Exception as e:
-            show_error(parent_window, "Error", f"An error occurred while opening crontab: {str(e)}")
+            messagebox.showerror("Error", f"An error occurred while opening crontab: {str(e)}", parent=parent_window)
 
     @staticmethod
     def open_terminal_command(command):

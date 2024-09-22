@@ -1,25 +1,18 @@
-# main.py
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+
 import tkinter as tk
 
 from core.config_manager import ensure_config_exists
 from main.main_window import MainWindow
 from ui.styles import apply_styles
 
-
 def main():
-    # Asigură-te că toate fișierele de configurare necesare există
     ensure_config_exists()
-
-    # Inițializează fereastra principală Tkinter
     root = tk.Tk()
-
-    # Aplică stilurile definite
     apply_styles()
-
-    # Creează și afișează fereastra principală a aplicației
     MainWindow(root)
-
-    # Începe bucla principală a aplicației
     root.mainloop()
 
 if __name__ == "__main__":

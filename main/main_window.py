@@ -1,61 +1,41 @@
 import tkinter as tk
-
-from cron.cron_generator_window import show_cron_generator
-from help.help_dialogs import show_about
-from project.project_manager import delete_project_ui, new_project
+from tkinter import ttk, messagebox
+from cron.cron_window import show_cron_generator  # Acest import a fost actualizat
 from settings.settings_window import show_settings_window
-from .main_window_ui import MainWindowUI
-from ui.menu_creator import create_menu
-from project.project_manager import refresh_project_list, update_project
+from ui.styles import apply_styles
 from cron.backup_manager import execute_backup
-from core.db_utils import check_db_availability
+from ui.results_display import ResultsDisplay
 
 class MainWindow:
     def __init__(self, root):
         self.root = root
-        self.root.title("Database Backup Manager")
-        self.root.geometry("800x600")
-        self.root.minsize(800, 600)
+        self.root.title("DB Backups App")
+        apply_styles()
 
-        self.available_dbs = check_db_availability()
+        self.create_widgets()
+        self.create_menu()
 
-        self.ui = MainWindowUI(self.root)
-        self.menu_creator = create_menu(self.root, self.create_menu_callbacks())
-        self.ui.bind_right_click(self.on_right_click)
-        self.refresh_project_list()
+    def create_widgets(self):
+        main_frame = ttk.Frame(self.root, padding="20")
+        main_frame.pack(fill=tk.BOTH, expand=True)
 
-    def create_menu_callbacks(self):
-        return {
-            'new_project': lambda: new_project(self.root, self.refresh_project_list, self.available_dbs),
-            'update_project': self.update_project,
-            'delete_project': lambda: delete_project_ui(self.root, self.ui.project_tree, self.refresh_project_list),
-            'execute_backup': self.execute_backup,
-            'show_about': lambda: show_about(self.root),
-            'open_cron_generator': lambda: show_cron_generator(self.root),
-            'open_settings': lambda: show_settings_window(self.root)
-        }
+        ttk.Button(main_frame, text="Run Backup", command=self.run_backup).pack(pady=(0, 10))
 
-    def refresh_project_list(self):
-        refresh_project_list(self.ui.project_tree)
+        self.progress_bar = ttk.Progressbar(main_frame, mode='indeterminate')
+        self.results_display = ResultsDisplay(main_frame)
 
-    def execute_backup(self):
-        execute_backup(self.ui.progress_bar, self.ui.results_display, self.root)
+    def create_menu(self):
+        menubar = tk.Menu(self.root)
+        self.root.config(menu=menubar)
 
-    def update_project(self):
-        update_project(self.root, self.ui.project_tree, self.refresh_project_list, self.available_dbs)
+        file_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="File", menu=file_menu)
+        file_menu.add_command(label="Settings", command=lambda: show_settings_window(self.root))
+        file_menu.add_command(label="Exit", command=self.root.quit)
 
-    def on_right_click(self, event):
-        item = self.ui.project_tree.identify('item', event.x, event.y)
-        if item:
-            self.ui.project_tree.selection_set(item)
-            self.menu_creator.show_context_menu(event)
-        else:
-            self.menu_creator.hide_context_menu()
+        tools_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="Tools", menu=tools_menu)
+        tools_menu.add_command(label="Cron Job Generator", command=lambda: show_cron_generator(self.root))
 
-def main():
-    root = tk.Tk()
-    MainWindow(root)
-    root.mainloop()
-
-if __name__ == "__main__":
-    main()
+    def run_backup(self):
+        execute_backup(self.progress_bar, self.results_display, self.root)
