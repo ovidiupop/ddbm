@@ -12,7 +12,7 @@ def refresh_project_list(project_tree):
 
 def new_project(root, refresh_callback, available_dbs):
     project_window = show_project_window(root, None, refresh_callback, available_dbs)
-    window_manager.make_modal(project_window.top)
+    window_manager.make_modal(project_window.window)  # Modificat aici
 
 def update_project(root, project_tree, refresh_callback, available_dbs):
     selected_item = project_tree.selection()

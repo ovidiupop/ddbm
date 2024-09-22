@@ -1,12 +1,19 @@
 import os
+import sys
 import json
 import shutil
 import subprocess
 from datetime import datetime
+
+# Adăugăm directorul rădăcină al proiectului la sys.path
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, project_root)
+
 from core.db_utils import check_db_availability
 
 def load_config():
-    with open('../config/config.json', 'r') as f:
+    config_path = os.path.join(project_root, 'config', 'config.json')
+    with open(config_path, 'r') as f:
         return json.load(f)
 
 def clean_old_backups(backup_path, max_backups):
@@ -54,7 +61,6 @@ def backup_sqlite(project, db_path, backup_dir, timestamp):
             print(f"SQLite backup failed for {project}.")
     else:
         print(f"SQLite backup failed for {project}: Database file not found.")
-
 
 def backup_json(project, project_config, backup_dir, timestamp):
     print(f"Attempting JSON backup for project: {project}")
