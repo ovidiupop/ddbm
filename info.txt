@@ -1,0 +1,27 @@
+Description
+
+The main purpose of this application is to manage and automate the backup process for different types of databases when working with Django projects.
+
+Features:
+
+    Management
+    ◦ Create new backup projects
+    ◦ Update existing projects
+    ◦ Delete projects
+
+    Support for exporting in multiple dump formats
+    ◦ PostgreSQL
+    ◦ SQLite
+    ◦ JSON
+
+    Flexible Configuration
+    ◦ Set database paths
+    ◦ Configure Python virtual environments (venv)
+
+    Backup Execution
+    ◦ Manually run backups for selected projects
+    ◦ Display backup operation results
+
+    Cron Jobs Generation and Management
+    ◦ Interface for generating cron expressions
+    ◦ Ability to open and edit the system's crontab

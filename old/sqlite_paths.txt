@@ -1,0 +1,3 @@
+andrada=/home/matricks/DjangoProjects/buckets/andrada/db.sqlite3
+minloppis=
+x=

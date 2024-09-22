@@ -1,0 +1,3 @@
+andrada=/home/matricks/DjangoProjects/andrada/manage.py
+minloppis=/home/matricks/DjangoProjects/minloppis/manage.py
+x=
