@@ -1,3 +1,0 @@
-andrada=/home/matricks/DjangoProjects/andrada/venv/bin/activate
-minloppis=/home/matricks/DjangoProjects/minloppis/venv/bin/activate
-x=/home/matricks/DjangoProjects/demo/venv/bin

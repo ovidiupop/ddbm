@@ -1,3 +1,0 @@
-andrada=sqlite,json
-minloppis=psql,json
-x=psql,sqlite,json

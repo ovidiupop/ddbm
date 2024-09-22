@@ -2,7 +2,7 @@
 import tkinter as tk
 
 from config_manager import ensure_config_exists
-from main_window import MainWindow
+from main.main_window import MainWindow
 from styles import apply_styles
 
 

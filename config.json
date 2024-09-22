@@ -10,7 +10,6 @@
         },
         "andrada": {
             "db_type": "sqlite,json",
-            "manage_path": "",
             "venv_path": "/home/matricks/DjangoProjects/andrada/venv",
             "sqlite_path": "/home/matricks/DjangoProjects/buckets/andrada/db.sqlite3",
             "project_path": "/home/matricks/DjangoProjects/andrada",
@@ -31,7 +30,7 @@
     },
     "cron_settings": {
         "minute": "*",
-        "hour": "12",
+        "hour": "0",
         "day": "*",
         "month": "6",
         "weekday": "*"

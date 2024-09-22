@@ -1,3 +1,0 @@
-andrada=True
-minloppis=True
-x=True

@@ -1,7 +1,8 @@
 import tkinter as tk
 from PIL import Image, ImageTk
-from tkinter import scrolledtext
-from window_utils import create_toplevel
+
+from help.help_dialogs import show_info
+
 
 class MenuCreator:
     def __init__(self, root, callbacks):
@@ -63,9 +64,8 @@ class MenuCreator:
         help_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Help", menu=help_menu, underline=0)
 
-        help_menu.add_command(label="Info", command=self.show_info,
+        help_menu.add_command(label="Info", command=lambda: show_info(self.root),
                               image=self.load_icon("help-info"), compound='left', accelerator="Ctrl+I")
-
         help_menu.add_command(label="About", command=self.callbacks['show_about'],
                               image=self.load_icon("about"), compound='left', accelerator="F1")
 
@@ -107,28 +107,6 @@ class MenuCreator:
             self.context_menu.unpost()
             self.context_menu_visible = False
             self.root.unbind("<Button-1>")
-
-    def show_info(self):
-        info_window = create_toplevel(self.root, "Info", "600x400")
-        info_window.minsize(400, 300)
-
-        text_widget = scrolledtext.ScrolledText(info_window, wrap=tk.WORD)
-        text_widget.pack(expand=True, fill='both', padx=10, pady=10)
-
-        try:
-            with open('info.txt', 'r', encoding='utf-8') as file:
-                content = file.read()
-                text_widget.insert(tk.END, content)
-        except FileNotFoundError:
-            text_widget.insert(tk.END, "Fișierul info.txt nu a fost găsit.")
-        except Exception as e:
-            text_widget.insert(tk.END, f"A apărut o eroare la citirea fișierului: {str(e)}")
-
-        text_widget.config(state=tk.DISABLED)  # Face textul doar pentru citire
-
-        # Adăugăm un buton de închidere
-        close_button = tk.Button(info_window, text="Închide", command=lambda: self.close_info_window(info_window))
-        close_button.pack(pady=10)
 
     def close_info_window(self, window):
         window.grab_release()
