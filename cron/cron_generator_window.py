@@ -1,8 +1,8 @@
 import tkinter as tk
 from .cron_generator_ui import CronGeneratorUI
 from .cron_utils import CronUtils
-from config_manager import load_config, save_config
-from window_utils import create_toplevel, adjust_window_size
+from core.config_manager import load_config, save_config
+from ui.dialog_utils import create_toplevel, adjust_window_size
 
 class CronGenerator:
     def __init__(self, parent):

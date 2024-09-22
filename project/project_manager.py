@@ -1,7 +1,7 @@
 from .project_window import show_project_window
-from config_manager import get_all_projects, delete_project as config_delete_project, get_project_data
-from window_utils import show_error, show_info, ask_yes_no
-from window_manager import window_manager
+from core.config_manager import get_all_projects, delete_project as config_delete_project, get_project_data
+from ui.dialog_utils import show_error, show_info, ask_yes_no
+from ui.window_manager import window_manager
 
 def refresh_project_list(project_tree):
     for i in project_tree.get_children():
@@ -19,7 +19,7 @@ def update_project(root, project_tree, refresh_callback, available_dbs):
     if selected_item:
         project_name = project_tree.item(selected_item)['values'][0]
         project_window = show_project_window(root, project_name, refresh_callback, available_dbs)
-        window_manager.make_modal(project_window.top)
+        window_manager.make_modal(project_window.window)
     else:
         show_error(root, "No Selection", "Please select a project to update.")
 

@@ -6,7 +6,7 @@ def setup_window(parent, project_name):
     is_new_project = project_name is None
     top.title("New Project" if is_new_project else f"Update Project: {project_name}")
     top.transient(parent)
-    top.grab_set()
+    # top.grab_set()
     return top
 
 def create_labeled_entry(parent, label, var, row, required=False):
@@ -58,22 +58,3 @@ def on_cancel(parent, data_changed, close_window):
 
 def on_escape(event):
     event.widget.master.on_cancel()
-
-def adjust_window_size(window, main_frame):
-    window.update_idletasks()
-    width = main_frame.winfo_reqwidth() + 40
-    height = main_frame.winfo_reqheight() + 40
-
-    max_width = int(window.winfo_screenwidth() * 0.8)
-    max_height = int(window.winfo_screenheight() * 0.8)
-
-    width = min(width, max_width)
-    height = min(height, max_height)
-
-    window.geometry(f"{width}x{height}")
-
-    screen_width = window.winfo_screenwidth()
-    screen_height = window.winfo_screenheight()
-    x = (screen_width - width) // 2
-    y = (screen_height - height) // 2
-    window.geometry(f"+{x}+{y}")

@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
-from widget_factory import create_title_label, create_projects_frame, create_progress_bar
-from results_display import ResultsDisplay
+from ui.ui_components import create_title_label, create_projects_frame, create_progress_bar
+from ui.ui_components import ResultsDisplay
 
 class MainWindowUI:
     def __init__(self, root):

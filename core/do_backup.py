@@ -1,13 +1,12 @@
 import os
-import sys
 import json
 import shutil
 import subprocess
 from datetime import datetime
-from db_utils import check_db_availability
+from core.db_utils import check_db_availability
 
 def load_config():
-    with open('config.json', 'r') as f:
+    with open('../config/config.json', 'r') as f:
         return json.load(f)
 
 def clean_old_backups(backup_path, max_backups):

@@ -30,7 +30,7 @@
     },
     "cron_settings": {
         "minute": "*",
-        "hour": "0",
+        "hour": "1",
         "day": "*",
         "month": "6",
         "weekday": "*"

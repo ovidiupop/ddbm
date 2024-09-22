@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from window_utils import create_toplevel, select_directory, adjust_window_size
+from ui.dialog_utils import create_toplevel, select_directory, adjust_window_size
 
 class SettingsWindowUI:
     def __init__(self, parent):

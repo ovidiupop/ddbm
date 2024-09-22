@@ -1,9 +1,9 @@
 # main.py
 import tkinter as tk
 
-from config_manager import ensure_config_exists
+from core.config_manager import ensure_config_exists
 from main.main_window import MainWindow
-from styles import apply_styles
+from ui.styles import apply_styles
 
 
 def main():

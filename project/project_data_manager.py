@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
-from config_manager import load_project_data, save_project_data, delete_project
+from core.config_manager import load_project_data, save_project_data, delete_project
 from .project_window_utils import browse_file, browse_directory
 
 class ProjectDataManager:

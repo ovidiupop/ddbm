@@ -1,4 +1,4 @@
-from config_manager import load_config, save_config
+from core.config_manager import load_config, save_config
 
 def load_settings():
     config = load_config()

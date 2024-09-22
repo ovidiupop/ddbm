@@ -5,8 +5,10 @@ from help.help_dialogs import show_about
 from project.project_manager import delete_project_ui, new_project
 from settings.settings_window import show_settings_window
 from .main_window_ui import MainWindowUI
-from .main_utils import create_menu, refresh_project_list, execute_backup, update_project
-from db_utils import check_db_availability
+from ui.menu_creator import create_menu
+from project.project_manager import refresh_project_list, update_project
+from cron.backup_manager import execute_backup
+from core.db_utils import check_db_availability
 
 class MainWindow:
     def __init__(self, root):

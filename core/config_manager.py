@@ -1,7 +1,11 @@
 import json
 import os
 
-CONFIG_FILE = 'config.json'
+# Obține calea către directorul rădăcină al proiectului
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Definește calea către fișierul de configurare
+CONFIG_FILE = os.path.join(BASE_DIR, 'config', 'config.json')
 
 def load_config():
     if not os.path.exists(CONFIG_FILE) or os.path.getsize(CONFIG_FILE) == 0:

@@ -1,6 +1,6 @@
 from .settings_window_ui import SettingsWindowUI
 from .settings_utils import load_settings, save_settings, validate_settings
-from window_utils import show_info, show_error
+from ui.dialog_utils import show_info, show_error
 
 class SettingsWindow:
     def __init__(self, parent):

@@ -1,7 +1,7 @@
 import os
 import tkinter as tk
 from tkinter import ttk, scrolledtext
-from window_utils import create_toplevel
+from ui.dialog_utils import create_toplevel
 
 def show_about(parent):
     about_window = create_toplevel(parent, "About Database Backup Manager", "300x200")
