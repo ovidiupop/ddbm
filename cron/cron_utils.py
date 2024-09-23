@@ -2,16 +2,23 @@ import os
 import sys
 import subprocess
 from tkinter import messagebox
-
+from core.config_manager import load_config
 
 class CronUtils:
     @staticmethod
     def generate_cron_job(values):
         python_path = sys.executable
         project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        do_backup_path = os.path.join(project_root, "core", "do_backup.py")
+        backup_manager_path = os.path.join(project_root, "backup_manager.py")
+
+        config = load_config()
+        app_settings = config.get('app_settings', {})
+        backup_folder = app_settings.get('backup_folder', os.path.join(project_root, 'backups'))
+
+        log_file = os.path.join(backup_folder, 'backup.log')
+
         schedule = f"{values['minute']} {values['hour']} {values['day']} {values['month']} {values['weekday']}"
-        return f"{schedule} {python_path} {do_backup_path}"
+        return f"{schedule} {python_path} {backup_manager_path} >> {log_file} 2>&1"
 
     @staticmethod
     def open_crontab(parent_window):

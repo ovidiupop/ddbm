@@ -1,20 +1,22 @@
 import tkinter as tk
+from tkinter import messagebox
 
 from cron.cron_window import show_cron_generator
 from help.help_dialogs import show_about
-from core.project_manager import delete_project_ui, new_project
+from project.project_manager import delete_project_ui, new_project
 from settings.settings_window import show_settings_window
 from .main_window_ui import MainWindowUI
 from ui.menu_creator import create_menu
-from core.project_manager import refresh_project_list, update_project
-from cron.backup_manager import execute_backup
+from project.project_manager import refresh_project_list, update_project
 from core.db_utils import check_db_availability
 from backup import show_backup_window
+from settings.settings_utils import are_settings_configured
+
 
 class MainWindow:
     def __init__(self, root):
         self.root = root
-        self.root.title("Django Databases Saver")
+        self.root.title("Django Database Backup Manager")
         self.root.geometry("700x400")
         self.root.minsize(700, 400)
 
@@ -25,16 +27,45 @@ class MainWindow:
         self.ui.bind_right_click(self.on_right_click)
         self.refresh_project_list()
 
+        self.root.after(100, self.check_settings)
+
+    def check_settings(self):
+        if not are_settings_configured():
+            response = messagebox.askyesno(
+                "Settings Required",
+                "The application requires some settings to be configured before it can be fully used. "
+                "Would you like to open the settings window now?"
+            )
+            if response:
+                self.open_settings()
+
     def create_menu_callbacks(self):
         return {
-            'new_project': lambda: new_project(self.root, self.refresh_project_list, self.available_dbs),
-            'update_project': self.update_project,
-            'delete_project': lambda: delete_project_ui(self.root, self.ui.project_tree, self.refresh_project_list),
-            'execute_backup': self.execute_backup,
+            'new_project': lambda: self.check_settings_before_action(
+                lambda: new_project(self.root, self.refresh_project_list, self.available_dbs)),
+            'update_project': lambda: self.check_settings_before_action(self.update_project),
+            'delete_project': lambda: self.check_settings_before_action(
+                lambda: delete_project_ui(self.root, self.ui.project_tree, self.refresh_project_list)),
+            'execute_backup': lambda: self.check_settings_before_action(self.execute_backup),
             'show_about': lambda: show_about(self.root),
-            'open_cron_generator': lambda: show_cron_generator(self.root),
-            'open_settings': lambda: show_settings_window(self.root)
+            'open_cron_generator': lambda: self.check_settings_before_action(
+                lambda: show_cron_generator(self.root)),
+            'open_settings': self.open_settings
         }
+
+    def check_settings_before_action(self, action):
+        if are_settings_configured():
+            action()
+        else:
+            response = messagebox.askyesno(
+                "Settings Required",
+                "This action requires settings to be configured. "
+                "Would you like to open the settings window now?"
+            )
+            if response:
+                self.open_settings()
+                if are_settings_configured():
+                    action()
 
     def refresh_project_list(self):
         refresh_project_list(self.ui.project_tree)
@@ -52,6 +83,9 @@ class MainWindow:
             self.menu_creator.show_context_menu(event)
         else:
             self.menu_creator.hide_context_menu()
+
+    def open_settings(self):
+        show_settings_window(self.root)
 
 
 def main():

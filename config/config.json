@@ -1,37 +1,29 @@
 {
     "projects": {
-        "minloppis": {
-            "db_type": "psql,json",
-            "manage_path": "",
-            "venv_path": "/home/matricks/DjangoProjects/minloppis/venv",
-            "sqlite_path": "",
-            "project_path": "/home/matricks/DjangoProjects/minloppis",
-            "use_venv": true
-        },
-        "demo": {
-            "db_type": "sqlite,json",
-            "venv_path": "/home/matricks/DjangoProjects/demo/venv",
-            "sqlite_path": "/home/matricks/DjangoProjects/demo/db.sqlite3",
-            "project_path": "/home/matricks/DjangoProjects/demo",
-            "use_venv": true
-        },
-        "andradas": {
+        "andrada": {
             "db_type": "sqlite,json",
             "venv_path": "/home/matricks/DjangoProjects/andrada/venv",
             "sqlite_path": "/home/matricks/DjangoProjects/buckets/andrada/db.sqlite3",
             "project_path": "/home/matricks/DjangoProjects/andrada",
             "use_venv": true
+        },
+        "minloppis": {
+            "db_type": "psql,json",
+            "venv_path": "/home/matricks/DjangoProjects/minloppis/venv",
+            "sqlite_path": "",
+            "project_path": "/home/matricks/DjangoProjects/minloppis",
+            "use_venv": true
         }
+    },
+    "cron_settings": {
+        "minute": "0",
+        "hour": "11",
+        "day": "*",
+        "month": "*",
+        "weekday": "*"
     },
     "app_settings": {
         "backup_folder": "/home/matricks/db_backups",
-        "backup_instances": "4"
-    },
-    "cron_settings": {
-        "minute": "*",
-        "hour": "5",
-        "day": "*",
-        "month": "*",
-        "weekday": "6"
+        "backup_instances": "5"
     }
 }
