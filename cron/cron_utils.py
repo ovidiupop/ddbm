@@ -3,6 +3,7 @@ import sys
 import subprocess
 from tkinter import messagebox
 
+
 class CronUtils:
     @staticmethod
     def generate_cron_job(values):

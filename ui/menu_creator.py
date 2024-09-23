@@ -60,7 +60,6 @@ class MenuCreator:
                                  image=self.load_icon("cron"), compound='left',
                                  accelerator="Ctrl+G")
 
-        # Meniul Help
         help_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Help", menu=help_menu, underline=0)
 
@@ -69,7 +68,6 @@ class MenuCreator:
         help_menu.add_command(label="About", command=self.callbacks['show_about'],
                               image=self.load_icon("about"), compound='left', accelerator="F1")
 
-        # Bind scurtăturile la funcțiile corespunzătoare
         self.root.bind('<Control-n>', lambda event: self.callbacks['new_project']())
         self.root.bind('<Control-u>', lambda event: self.callbacks['update_project']())
         self.root.bind('<Control-d>', lambda event: self.callbacks['delete_project']())

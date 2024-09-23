@@ -8,18 +8,18 @@
             "project_path": "/home/matricks/DjangoProjects/minloppis",
             "use_venv": true
         },
-        "andrada": {
-            "db_type": "sqlite,json",
-            "venv_path": "/home/matricks/DjangoProjects/andrada/venv",
-            "sqlite_path": "/home/matricks/DjangoProjects/buckets/andrada/db.sqlite3",
-            "project_path": "/home/matricks/DjangoProjects/andrada",
-            "use_venv": true
-        },
-        "demoste": {
+        "demo": {
             "db_type": "sqlite,json",
             "venv_path": "/home/matricks/DjangoProjects/demo/venv",
             "sqlite_path": "/home/matricks/DjangoProjects/demo/db.sqlite3",
             "project_path": "/home/matricks/DjangoProjects/demo",
+            "use_venv": true
+        },
+        "andradas": {
+            "db_type": "sqlite,json",
+            "venv_path": "/home/matricks/DjangoProjects/andrada/venv",
+            "sqlite_path": "/home/matricks/DjangoProjects/buckets/andrada/db.sqlite3",
+            "project_path": "/home/matricks/DjangoProjects/andrada",
             "use_venv": true
         }
     },
@@ -29,8 +29,8 @@
     },
     "cron_settings": {
         "minute": "*",
-        "hour": "6",
-        "day": "4",
+        "hour": "3",
+        "day": "*",
         "month": "6",
         "weekday": "6"
     }

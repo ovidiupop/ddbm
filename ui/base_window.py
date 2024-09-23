@@ -30,18 +30,23 @@ class BaseWindow:
     def close(self):
         self.top.destroy()
 
-    def create_button_frame(self):
+    def create_button_frame(self, buttons):
+        """
+        Creează un frame cu butoane.
+
+        :param buttons: O listă de tupluri, fiecare tuplu conținând (text_buton, comanda_buton)
+        :return: frame-ul cu butoane și un dicționar cu referințe la butoane
+        """
         button_frame = ttk.Frame(self.main_frame)
-        button_frame.grid(row=100, column=0, sticky="ew", pady=(20, 0))
-        button_frame.columnconfigure(0, weight=1)
+        button_frame.grid(row=100, column=0, sticky="e", pady=(20, 0))
 
-        save_button = ttk.Button(button_frame, text="Save", command=self.save, style='Primary.TButton')
-        save_button.grid(row=0, column=0, padx=(0, 5), sticky="w")
+        button_refs = {}
+        for idx, (text, command) in enumerate(buttons):
+            button = ttk.Button(button_frame, text=text, command=command)
+            button.grid(row=0, column=idx, padx=(0, 5) if idx < len(buttons) - 1 else 0)
+            button_refs[text] = button
 
-        cancel_button = ttk.Button(button_frame, text="Cancel", command=self.close, style='Danger.TButton')
-        cancel_button.grid(row=0, column=1, padx=(5, 0), sticky="e")
-
-        return button_frame, save_button, cancel_button
+        return button_frame, button_refs
 
     def create_labeled_frame(self, parent, title, padding="10"):
         frame = ttk.LabelFrame(parent, text=title, padding=padding)
@@ -51,10 +56,10 @@ class BaseWindow:
 
     def adjust_window_size(self):
         self.top.update_idletasks()
-        width = max(650, self.top.winfo_reqwidth())
+        width = self.top.winfo_reqwidth()
         height = self.top.winfo_reqheight()
         self.top.geometry(f"{width}x{height}")
-        self.top.minsize(650, height)
+        self.top.minsize(700, height)
 
     def create_path_input(self, parent, label, var, row):
         ttk.Label(parent, text=label).grid(row=row, column=0, sticky='e', padx=(0, 5), pady=5)
@@ -69,8 +74,7 @@ class BaseWindow:
         if current_path and os.path.exists(current_path):
             initial_dir = current_path
         else:
-            initial_dir = os.path.expanduser("~")  # Începe de la directorul home al utilizatorului
-
+            initial_dir = os.path.expanduser("~")
         folder = filedialog.askdirectory(parent=self.top, initialdir=initial_dir)
         if folder:
             var.set(folder)

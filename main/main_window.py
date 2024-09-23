@@ -13,9 +13,9 @@ from core.db_utils import check_db_availability
 class MainWindow:
     def __init__(self, root):
         self.root = root
-        self.root.title("Database Backup Manager")
-        self.root.geometry("800x600")
-        self.root.minsize(800, 600)
+        self.root.title("Django Databases Saver")
+        self.root.geometry("700x500")
+        self.root.minsize(700, 500)
 
         self.available_dbs = check_db_availability()
 

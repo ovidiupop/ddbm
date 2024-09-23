@@ -1,14 +1,12 @@
-import os
-import sys
 import json
+import os
 import shutil
 import subprocess
+import sys
 from datetime import datetime
 
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
-
-from core.db_utils import check_db_availability
 
 
 def load_config():
@@ -18,14 +16,16 @@ def load_config():
 
 
 def clean_old_backups(backup_path, max_backups):
+    max_backups = int(max_backups)
     if os.path.exists(backup_path) and os.listdir(backup_path):
         files = sorted(
             [os.path.join(backup_path, f) for f in os.listdir(backup_path)],
-            key=os.path.getmtime
+            key=os.path.getmtime,
+            reverse=True
         )
-        for old_file in files[:-max_backups]:
+        for old_file in files[max_backups:]:
             os.remove(old_file)
-    # Mesajul despre curățare a fost eliminat
+            # print(f"Deleted old backup: {old_file}")
 
 
 def backup_postgresql(project, backup_dir, timestamp):
@@ -35,7 +35,7 @@ def backup_postgresql(project, backup_dir, timestamp):
 
     try:
         subprocess.run(["pg_dump", project, "-f", backup_file], check=True)
-        print(f"PostgreSQL backup completed for {project}: {os.path.basename(backup_file)}")
+        print(f"PostgreSQL backup completed: {os.path.basename(backup_file)}")
     except subprocess.CalledProcessError:
         print(f"PostgreSQL backup failed for {project}.")
 
@@ -47,7 +47,7 @@ def backup_mysql(project, backup_dir, timestamp):
 
     try:
         subprocess.run(["mysqldump", project, "-r", backup_file], check=True)
-        print(f"MySQL backup completed for {project}: {os.path.basename(backup_file)}")
+        print(f"MySQL backup completed: {os.path.basename(backup_file)}")
     except subprocess.CalledProcessError:
         print(f"MySQL backup failed for {project}.")
 
@@ -60,7 +60,7 @@ def backup_sqlite(project, db_path, backup_dir, timestamp):
     if os.path.isfile(db_path):
         try:
             shutil.copy2(db_path, backup_file)
-            print(f"SQLite backup completed for {project}: {os.path.basename(backup_file)}")
+            print(f"SQLite backup completed: {os.path.basename(backup_file)}")
         except IOError:
             print(f"SQLite backup failed for {project}.")
     else:
@@ -96,7 +96,7 @@ def backup_json(project, project_config, backup_dir, timestamp):
                                 executable='/bin/bash')
 
         if result.returncode == 0:
-            print(f"JSON backup completed for {project}: {os.path.basename(backup_file)}")
+            print(f"JSON backup completed: {os.path.basename(backup_file)}")
         else:
             print(f"JSON backup failed for {project}. Error: Command returned non-zero exit status.")
             print(f"Command error: {result.stderr}")
@@ -110,13 +110,19 @@ def main():
     projects = config.get('projects', {})
     app_settings = config.get('app_settings', {})
 
-    backup_dir = app_settings.get('backup_folder', '/home/matricks/db_backups')
-    max_backups = app_settings.get('backup_instances', 4)
+    # Folosim o cale relativă la directorul proiectului pentru backup-uri
+    default_backup_dir = os.path.join(project_root, 'backups')
+    backup_dir = app_settings.get('backup_folder', default_backup_dir)
+
+    # Asigurăm-ne că directorul de backup există
+    os.makedirs(backup_dir, exist_ok=True)
+
+    max_backups = int(app_settings.get('backup_instances', 4))
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     for i, (project, project_config) in enumerate(projects.items()):
         if i > 0:
-            print("-" * 50)  # Linie de separare între proiecte
+            print("-" * 50)
         print(f"Processing backup for project: {project}")
 
         db_types = project_config.get('db_type', '').split(',')

@@ -1,7 +1,16 @@
 import os
 import tkinter as tk
 from tkinter import ttk, scrolledtext
-from ui.dialog_utils import create_toplevel
+
+def create_toplevel(parent, title, geometry=None):
+    top = tk.Toplevel(parent)
+    top.title(title)
+    if geometry:
+        top.geometry(geometry)
+    top.transient(parent)
+    top.grab_set()
+    return top
+
 
 def show_about(parent):
     about_window = create_toplevel(parent, "About Database Backup Manager", "300x200")
@@ -15,7 +24,6 @@ def show_about(parent):
     ttk.Label(about_frame, text="© 2024 Ovidiu Pop").pack()
 
     ttk.Button(about_frame, text="OK", command=about_window.destroy).pack(pady=(20, 0))
-
 
 
 def show_info(parent):

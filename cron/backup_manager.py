@@ -4,6 +4,7 @@ import subprocess
 import threading
 import os
 
+
 def execute_backup(progress_bar, results_display, root):
     progress_bar.pack(pady=(10, 0))
     progress_bar.start(10)
@@ -11,7 +12,6 @@ def execute_backup(progress_bar, results_display, root):
 
     def backup_thread():
         try:
-            # Construim calea absolută către do_backup.py
             script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'core', 'do_backup.py')
             result = subprocess.run(["python3", script_path], capture_output=True, text=True, check=True)
             output = result.stdout
@@ -23,6 +23,7 @@ def execute_backup(progress_bar, results_display, root):
             root.after(0, lambda: finish_backup(output, error, progress_bar, results_display))
 
     threading.Thread(target=backup_thread, daemon=True).start()
+
 
 def finish_backup(output, error, progress_bar, results_display):
     progress_bar.stop()
