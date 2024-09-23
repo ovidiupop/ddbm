@@ -31,7 +31,7 @@
         "minute": "*",
         "hour": "5",
         "day": "*",
-        "month": "6",
+        "month": "*",
         "weekday": "6"
     }
 }

@@ -9,14 +9,14 @@ from ui.menu_creator import create_menu
 from core.project_manager import refresh_project_list, update_project
 from cron.backup_manager import execute_backup
 from core.db_utils import check_db_availability
-
+from backup import show_backup_window
 
 class MainWindow:
     def __init__(self, root):
         self.root = root
         self.root.title("Django Databases Saver")
-        self.root.geometry("700x500")
-        self.root.minsize(700, 500)
+        self.root.geometry("700x400")
+        self.root.minsize(700, 400)
 
         self.available_dbs = check_db_availability()
 
@@ -40,7 +40,7 @@ class MainWindow:
         refresh_project_list(self.ui.project_tree)
 
     def execute_backup(self):
-        execute_backup(self.ui.progress_bar, self.ui.results_display, self.root)
+        show_backup_window(self.root)
 
     def update_project(self):
         update_project(self.root, self.ui.project_tree, self.refresh_project_list, self.available_dbs)

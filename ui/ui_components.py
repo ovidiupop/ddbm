@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 
-
 class AutoHideScrollbar(ttk.Scrollbar):
     def set(self, lo, hi):
         if float(lo) <= 0.0 and float(hi) >= 1.0:
@@ -10,16 +9,15 @@ class AutoHideScrollbar(ttk.Scrollbar):
             self.grid()
         ttk.Scrollbar.set(self, lo, hi)
 
-
 class ScrollableTreeview(ttk.Frame):
     def __init__(self, parent, columns, **kwargs):
         super().__init__(parent)
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+
         self.tree = ttk.Treeview(self, columns=columns, **kwargs)
         self.scrollbar = AutoHideScrollbar(self, orient="vertical", command=self.tree.yview)
         self.tree.configure(yscrollcommand=self.scrollbar.set)
-
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure(0, weight=1)
 
         self.tree.grid(row=0, column=0, sticky="nsew")
         self.scrollbar.grid(row=0, column=1, sticky="ns")
@@ -42,24 +40,17 @@ class ScrollableTreeview(ttk.Frame):
     def unbind(self, sequence, funcid=None):
         self.tree.unbind(sequence, funcid)
 
-    def check_scrollbar(self):
-        if len(self.tree.get_children()) > self.tree.cget("height"):
-            self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        else:
-            self.scrollbar.pack_forget()
-        self.after(100, self.check_scrollbar)
-
     def __getattr__(self, attr):
         return getattr(self.tree, attr)
 
-
 def create_projects_frame(parent):
     frame = ttk.LabelFrame(parent, text="Projects", padding="10")
+    frame.grid_rowconfigure(0, weight=1)
+    frame.grid_columnconfigure(0, weight=1)
+
     columns = ("project", "db_type", "project_path")
     tree = ScrollableTreeview(frame, columns=columns, show="headings", selectmode="browse")
     tree.grid(row=0, column=0, sticky="nsew")
-    frame.grid_rowconfigure(0, weight=1)
-    frame.grid_columnconfigure(0, weight=1)
 
     column_titles = {
         "project": "Project Name",
@@ -77,7 +68,6 @@ def create_projects_frame(parent):
         tree.column(col, width=column_widths[col])
 
     return frame, tree
-
 
 def create_progress_bar(parent):
     progress_bar = ttk.Progressbar(parent, mode='indeterminate', length=300)
