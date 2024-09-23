@@ -1,6 +1,6 @@
-from .project_window import show_project_window
+from project.project_window import show_project_window
 from core.config_manager import get_all_projects, delete_project as config_delete_project, get_project_data
-from project.dialog_utils import show_error, show_info, ask_yes_no
+from core.dialog_utils import show_error, show_info, ask_yes_no
 
 
 def refresh_project_list(project_tree):

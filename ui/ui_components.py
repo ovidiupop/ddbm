@@ -5,9 +5,9 @@ from tkinter import ttk
 class AutoHideScrollbar(ttk.Scrollbar):
     def set(self, lo, hi):
         if float(lo) <= 0.0 and float(hi) >= 1.0:
-            self.pack_forget()
+            self.grid_remove()
         else:
-            self.pack(side=tk.RIGHT, fill=tk.Y)
+            self.grid()
         ttk.Scrollbar.set(self, lo, hi)
 
 
@@ -18,9 +18,19 @@ class ScrollableTreeview(ttk.Frame):
         self.scrollbar = AutoHideScrollbar(self, orient="vertical", command=self.tree.yview)
         self.tree.configure(yscrollcommand=self.scrollbar.set)
 
-        self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
 
+        self.tree.grid(row=0, column=0, sticky="nsew")
+        self.scrollbar.grid(row=0, column=1, sticky="ns")
+
+        self.after(100, self.check_scrollbar)
+
+    def check_scrollbar(self):
+        if len(self.tree.get_children()) > self.tree.cget("height"):
+            self.scrollbar.grid()
+        else:
+            self.scrollbar.grid_remove()
         self.after(100, self.check_scrollbar)
 
     def identify(self, component, x, y):
@@ -47,7 +57,9 @@ def create_projects_frame(parent):
     frame = ttk.LabelFrame(parent, text="Projects", padding="10")
     columns = ("project", "db_type", "project_path")
     tree = ScrollableTreeview(frame, columns=columns, show="headings", selectmode="browse")
-    tree.pack(fill=tk.BOTH, expand=True)
+    tree.grid(row=0, column=0, sticky="nsew")
+    frame.grid_rowconfigure(0, weight=1)
+    frame.grid_columnconfigure(0, weight=1)
 
     column_titles = {
         "project": "Project Name",
@@ -63,16 +75,12 @@ def create_projects_frame(parent):
     for col in columns:
         tree.heading(col, text=column_titles[col])
         tree.column(col, width=column_widths[col])
-        # tree.column(col, width=100)
-    # for col in columns:
-    #     tree.heading(col, text=col.replace("_", " ").title())
-    #     tree.column(col, width=100)
 
     return frame, tree
 
 
 def create_progress_bar(parent):
     progress_bar = ttk.Progressbar(parent, mode='indeterminate', length=300)
-    progress_bar.pack(pady=(10, 0))
-    progress_bar.pack_forget()
+    progress_bar.grid(row=1, column=0, pady=(10, 0), sticky="ew")
+    progress_bar.grid_remove()
     return progress_bar

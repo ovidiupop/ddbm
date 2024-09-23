@@ -2,13 +2,14 @@ import tkinter as tk
 
 from cron.cron_window import show_cron_generator
 from help.help_dialogs import show_about
-from project.project_manager import delete_project_ui, new_project
+from core.project_manager import delete_project_ui, new_project
 from settings.settings_window import show_settings_window
 from .main_window_ui import MainWindowUI
 from ui.menu_creator import create_menu
-from project.project_manager import refresh_project_list, update_project
+from core.project_manager import refresh_project_list, update_project
 from cron.backup_manager import execute_backup
 from core.db_utils import check_db_availability
+
 
 class MainWindow:
     def __init__(self, root):
@@ -52,10 +53,12 @@ class MainWindow:
         else:
             self.menu_creator.hide_context_menu()
 
+
 def main():
     root = tk.Tk()
     MainWindow(root)
     root.mainloop()
+
 
 if __name__ == "__main__":
     main()

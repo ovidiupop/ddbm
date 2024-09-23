@@ -18,19 +18,27 @@ class SettingsWindowUI(BaseWindow):
         self.create_backup_section()
         self.create_button_frame()
 
-    def create_button_frame(self, buttons=None):
+    def create_button_frame(self, buttons=False):
         buttons = [
             ("Save", self.save_callback),
             ("Cancel", self.close)
         ]
-        button_frame, self.buttons = super().create_button_frame(buttons)
+        self.buttons_frame, self.buttons = super().create_button_frame(buttons)
+
+    # def create_button_frame(self, buttons=None):
+    #     buttons = [
+    #         ("Save", self.save_callback),
+    #         ("Cancel", self.close)
+    #     ]
+    #     button_frame, self.buttons = super().create_button_frame(buttons)
 
     def create_path_section(self):
         frame = self.create_labeled_frame(self.main_frame, "Path Settings")
         frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
         frame.columnconfigure(1, weight=1)
 
-        self.create_path_input(frame, "Backup Folder:", self.backup_folder, 0)
+        self.create_path_input(frame, "Backup Folder:", self.backup_folder,
+                               command=lambda: self.browse_folder(self.backup_folder), row=0)
 
     def create_backup_section(self):
         frame = self.create_labeled_frame(self.main_frame, 'Backup Settings')

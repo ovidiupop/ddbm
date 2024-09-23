@@ -29,7 +29,7 @@
     },
     "cron_settings": {
         "minute": "*",
-        "hour": "3",
+        "hour": "5",
         "day": "*",
         "month": "6",
         "weekday": "6"

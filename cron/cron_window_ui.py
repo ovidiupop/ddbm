@@ -42,8 +42,9 @@ class CronGeneratorWindowUI(BaseWindow):
 
     def create_result_section(self):
         result_frame = self.create_labeled_frame(self.main_frame, "Generated Cron Job")
+        result_frame.columnconfigure(0, weight=1)
         self.result = tk.Text(result_frame, height=2, wrap=tk.WORD)
-        self.result.pack(fill=tk.X)
+        self.result.grid(row=0, column=0, sticky="ew")
 
     def create_button_frame(self, buttons=None):
         buttons = [

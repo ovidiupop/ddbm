@@ -1,33 +1,31 @@
+# ui/results_display.py
+
 import tkinter as tk
-from tkinter import ttk, scrolledtext
+from tkinter import ttk
+from tkinter.scrolledtext import ScrolledText
 
-class ResultsDisplay:
+class ResultsDisplay(ttk.Frame):
     def __init__(self, parent):
-        self.frame = ttk.LabelFrame(parent, text="Results", padding="10")
-        self.frame.pack(fill=tk.BOTH, expand=True, pady=(10, 0))
-        self.frame.pack_forget()
+        super().__init__(parent)
+        self.create_widgets()
 
-        self.paned = ttk.PanedWindow(self.frame, orient=tk.VERTICAL)
-        self.paned.pack(fill=tk.BOTH, expand=True)
+    def create_widgets(self):
+        self.grid(sticky="nsew")
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
 
-        self.text_frame = ttk.Frame(self.paned)
-        self.paned.add(self.text_frame, weight=1)
-
-        self.output_text = scrolledtext.ScrolledText(self.text_frame, wrap=tk.WORD)
-        self.output_text.pack(fill=tk.BOTH, expand=True)
-
-        self.button_frame = ttk.Frame(self.paned, height=40)
-        self.paned.add(self.button_frame)
-
-        self.close_button = ttk.Button(self.button_frame, text="Close Results", command=self.hide)
-        self.close_button.pack(pady=5)
-
-    def show(self):
-        self.frame.pack(fill=tk.BOTH, expand=True, pady=(10, 0))
-
-    def hide(self):
-        self.frame.pack_forget()
+        self.text_widget = ScrolledText(self, wrap=tk.WORD)
+        self.text_widget.grid(row=0, column=0, sticky="nsew")
 
     def set_text(self, text):
-        self.output_text.delete('1.0', tk.END)
-        self.output_text.insert(tk.END, text)
+        self.text_widget.delete('1.0', tk.END)
+        self.text_widget.insert(tk.END, text)
+
+    def clear(self):
+        self.text_widget.delete('1.0', tk.END)
+
+    def hide(self):
+        self.grid_remove()
+
+    def show(self):
+        self.grid()

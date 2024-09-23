@@ -2,16 +2,22 @@ import tkinter as tk
 from tkinter import ttk, filedialog
 import os
 
-
 class BaseWindow:
-    def __init__(self, parent, title):
+    def __init__(self, parent, title, resizable=False):
         self.parent = parent
         self.top = tk.Toplevel(parent)
         self.top.title(title)
         self.top.transient(parent)
         self.top.grab_set()
 
+        # Setează fereastra ca neredimensionabilă implicit
+        self.top.resizable(width=resizable, height=resizable)
+
+        # Forțează fereastra să rămână deasupra ferestrei părinte
         self.top.attributes('-topmost', True)
+        self.parent.attributes('-topmost', True)
+        self.parent.attributes('-topmost', False)
+        self.top.focus_force()
 
         self.main_frame = ttk.Frame(self.top, padding="20")
         self.main_frame.grid(row=0, column=0, sticky="nsew")
@@ -33,19 +39,14 @@ class BaseWindow:
         self.top.destroy()
 
     def create_button_frame(self, buttons):
-        """
-        Creează un frame cu butoane.
-
-        :param buttons: O listă de tupluri, fiecare tuplu conținând (text_buton, comanda_buton)
-        :return: frame-ul cu butoane și un dicționar cu referințe la butoane
-        """
         button_frame = ttk.Frame(self.main_frame)
-        button_frame.grid(row=100, column=0, sticky="e", pady=(20, 0))
+        button_frame.grid(row=100, column=0, sticky="ew", pady=(20, 0))
+        button_frame.grid_columnconfigure(0, weight=1)  # Această coloană va "împinge" butoanele spre dreapta
 
         button_refs = {}
         for idx, (text, command) in enumerate(buttons):
             button = ttk.Button(button_frame, text=text, command=command)
-            button.grid(row=0, column=idx, padx=(0, 5) if idx < len(buttons) - 1 else 0)
+            button.grid(row=0, column=idx+1, padx=(0, 5))  # Începem de la coloana 1
             button_refs[text] = button
 
         return button_frame, button_refs
@@ -53,17 +54,21 @@ class BaseWindow:
     def create_labeled_frame(self, parent, title, padding="10"):
         frame = ttk.LabelFrame(parent, text=title, padding=padding)
         frame.grid(sticky="nsew", padx=5, pady=5)
-        frame.columnconfigure(1, weight=1)
+        frame.grid_columnconfigure(1, weight=1)
         return frame
 
     def adjust_window_size(self):
         self.top.update_idletasks()
-        width = self.top.winfo_reqwidth()
+        width = max(700, self.top.winfo_reqwidth())
         height = self.top.winfo_reqheight()
         self.top.geometry(f"{width}x{height}")
-        self.top.minsize(700, height)
+        if not self.top.resizable()[0]:  # Verifică dacă fereastra este redimensionabilă
+            self.top.minsize(width, height)
+            self.top.maxsize(width, height)
 
     def create_path_input(self, parent, label, var, command=None, row=0, required=False):
+        parent.grid_columnconfigure(1, weight=1)  # Permite coloanei 1 (input) să se extindă
+
         label_text = f"{label} {'*' if required else ''}"
         ttk.Label(parent, text=label_text).grid(row=row, column=0, sticky='e', padx=(0, 5), pady=5)
 
@@ -74,7 +79,7 @@ class BaseWindow:
             command = lambda: self.browse_folder(var)
 
         browse_button = ttk.Button(parent, text='Browse', command=command)
-        browse_button.grid(row=row, column=2, padx=(5, 0), pady=5)
+        browse_button.grid(row=row, column=2, sticky='e', padx=(5, 0), pady=5)
 
         return entry, browse_button
 
@@ -86,19 +91,32 @@ class BaseWindow:
         folder = filedialog.askdirectory(parent=self.top, initialdir=initial_dir)
         if folder:
             var.set(folder)
-        self.top.lift()
-        self.top.focus_force()
+        self.keep_on_top()
 
     def browse_file(self, var, filetypes=None):
         initial_dir = os.path.dirname(var.get())
         if not os.path.isdir(initial_dir):
             initial_dir = os.path.expanduser("~")
 
-        file = filedialog.askopenfilename(parent=self.top, initialdir=initial_dir, filetypes=filetypes)
+        if filetypes is None:
+            filetypes = [("All Files", "*.*")]
+
+        file = filedialog.askopenfilename(
+            parent=self.top,
+            initialdir=initial_dir,
+            filetypes=filetypes,
+            title="Select SQLite Database File"
+        )
         if file:
             var.set(file)
+        self.keep_on_top()
+
+    def keep_on_top(self):
+        self.top.attributes('-topmost', True)
+        self.top.attributes('-topmost', False)
         self.top.lift()
         self.top.focus_force()
+
     def save(self):
         pass
 

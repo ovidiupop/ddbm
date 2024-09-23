@@ -6,7 +6,7 @@ import os
 
 
 def execute_backup(progress_bar, results_display, root):
-    progress_bar.pack(pady=(10, 0))
+    progress_bar.grid(row=0, column=0, pady=(10, 0), sticky="ew")
     progress_bar.start(10)
     results_display.hide()
 
@@ -27,7 +27,7 @@ def execute_backup(progress_bar, results_display, root):
 
 def finish_backup(output, error, progress_bar, results_display):
     progress_bar.stop()
-    progress_bar.pack_forget()
+    progress_bar.grid_remove()
     results_display.show()
 
     if error:
