@@ -1,4 +1,4 @@
-from project.project_ui import ProjectUI
+from project.project_window_ui import ProjectWindowUI
 
 
 def __init__(self, parent, project_name=None, refresh_callback=None, available_dbs=None):
@@ -12,7 +12,7 @@ def __init__(self, parent, project_name=None, refresh_callback=None, available_d
     super().__init__(parent, "New Project" if self.is_new_project else f"Update Project: {project_name}")
     self.load_data()
 
-    self.ui = ProjectUI(self.main_frame, self)
+    self.ui = ProjectWindowUI(self.main_frame, self)
     self.ui.create_widgets()
 
     self.top.bind("<<AdjustWindowSize>>", lambda e: self.adjust_window_size())

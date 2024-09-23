@@ -1,28 +1,25 @@
 import tkinter as tk
 from tkinter import messagebox
-from ui.base_window import BaseWindow
 from core.config_manager import load_project_data, save_project_data, delete_project
-from .project_utils import browse_file, browse_directory
-from .project_ui import ProjectUI
+from .project_window_ui import ProjectWindowUI
 
-
-class ProjectWindow(BaseWindow):
+class ProjectWindow:
     def __init__(self, parent, project_name=None, refresh_callback=None, available_dbs=None):
+        self.parent = parent
         self.project_name = project_name
         self.is_new_project = project_name is None
         self.refresh_callback = refresh_callback
         self.available_dbs = available_dbs or []
 
         self.initialize_variables()
-
-        super().__init__(parent, "New Project" if self.is_new_project else f"Update Project: {project_name}")
         self.load_data()
 
-        self.ui = ProjectUI(self.main_frame, self)
+        title = "New Project" if self.is_new_project else f"Update Project: {project_name}"
+        self.ui = ProjectWindowUI(parent, self, title)
         self.ui.create_widgets()
-        self.adjust_window_size()
+        self.ui.adjust_window_size()
 
-        self.top.bind("<<AdjustWindowSize>>", lambda e: self.adjust_window_size())
+        self.ui.top.bind("<<AdjustWindowSize>>", lambda e: self.ui.adjust_window_size())
 
     def initialize_variables(self):
         self.project_name_var = tk.StringVar()
@@ -63,27 +60,26 @@ class ProjectWindow(BaseWindow):
         }
 
     def browse_sqlite_path(self):
-        browse_file("Select SQLite Database File", self.sqlite_path_var)
+        self.ui.browse_file(self.sqlite_path_var, filetypes=[("SQLite Database", "*.db *.sqlite *.sqlite3")])
 
     def browse_venv_path(self):
-        browse_directory("Select Virtual Environment Directory", self.venv_path_var)
+        self.ui.browse_folder(self.venv_path_var)
 
     def browse_project_path(self):
-        browse_directory("Select Project Directory", self.project_path_var)
+        self.ui.browse_folder(self.project_path_var)
 
     def validate_inputs(self):
         if not self.project_name_var.get().strip():
-            messagebox.showerror("Error", "Project name is required.", parent=self.top)
+            messagebox.showerror("Error", "Project name is required.", parent=self.ui.top)
             return False
         if not self.project_path_var.get().strip():
-            messagebox.showerror("Error", "Project path is required.", parent=self.top)
+            messagebox.showerror("Error", "Project path is required.", parent=self.ui.top)
             return False
         if self.use_venv_var.get() and not self.venv_path_var.get().strip():
-            messagebox.showerror("Error", "Venv path is required when using a virtual environment.", parent=self.top)
+            messagebox.showerror("Error", "Venv path is required when using a virtual environment.", parent=self.ui.top)
             return False
         if self.sqlite_var.get() and not self.sqlite_path_var.get().strip():
-            messagebox.showerror("Error", "SQLite database path is required when SQLite backup is enabled.",
-                                 parent=self.top)
+            messagebox.showerror("Error", "SQLite database path is required when SQLite backup is enabled.", parent=self.ui.top)
             return False
         return True
 
@@ -108,12 +104,12 @@ class ProjectWindow(BaseWindow):
             delete_project(self.project_name)
 
         action = "created" if self.is_new_project else "updated"
-        messagebox.showinfo("Success", f"Project '{new_project_name}' has been {action}.", parent=self.top)
+        messagebox.showinfo("Success", f"Project '{new_project_name}' has been {action}.", parent=self.ui.top)
 
         if self.refresh_callback:
             self.refresh_callback()
 
-        self.close()
+        self.ui.close()
 
     def data_changed(self):
         current_values = {
@@ -129,7 +125,6 @@ class ProjectWindow(BaseWindow):
         }
         return any(self.initial_values[key] != current_values[key] for key in self.initial_values)
 
-
 def show_project_window(parent, project_name=None, refresh_callback=None, available_dbs=None):
     project_window = ProjectWindow(parent, project_name, refresh_callback, available_dbs)
-    project_window.top.wait_window()
+    project_window.ui.top.wait_window()

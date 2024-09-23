@@ -11,6 +11,8 @@ class BaseWindow:
         self.top.transient(parent)
         self.top.grab_set()
 
+        self.top.attributes('-topmost', True)
+
         self.main_frame = ttk.Frame(self.top, padding="20")
         self.main_frame.grid(row=0, column=0, sticky="nsew")
         self.top.grid_rowconfigure(0, weight=1)
@@ -61,24 +63,42 @@ class BaseWindow:
         self.top.geometry(f"{width}x{height}")
         self.top.minsize(700, height)
 
-    def create_path_input(self, parent, label, var, row):
-        ttk.Label(parent, text=label).grid(row=row, column=0, sticky='e', padx=(0, 5), pady=5)
+    def create_path_input(self, parent, label, var, command=None, row=0, required=False):
+        label_text = f"{label} {'*' if required else ''}"
+        ttk.Label(parent, text=label_text).grid(row=row, column=0, sticky='e', padx=(0, 5), pady=5)
+
         entry = ttk.Entry(parent, textvariable=var)
         entry.grid(row=row, column=1, sticky='ew', pady=5)
-        browse_button = ttk.Button(parent, text='Browse', command=lambda: self.browse_folder(var))
+
+        if command is None:
+            command = lambda: self.browse_folder(var)
+
+        browse_button = ttk.Button(parent, text='Browse', command=command)
         browse_button.grid(row=row, column=2, padx=(5, 0), pady=5)
+
         return entry, browse_button
 
     def browse_folder(self, var):
-        current_path = var.get()
-        if current_path and os.path.exists(current_path):
-            initial_dir = current_path
-        else:
-            initial_dir = os.path.expanduser("~")
+        initial_dir = var.get()
+        if not os.path.isdir(initial_dir):
+            initial_dir = os.path.dirname(initial_dir) if os.path.isfile(initial_dir) else os.path.expanduser("~")
+
         folder = filedialog.askdirectory(parent=self.top, initialdir=initial_dir)
         if folder:
             var.set(folder)
+        self.top.lift()
+        self.top.focus_force()
 
+    def browse_file(self, var, filetypes=None):
+        initial_dir = os.path.dirname(var.get())
+        if not os.path.isdir(initial_dir):
+            initial_dir = os.path.expanduser("~")
+
+        file = filedialog.askopenfilename(parent=self.top, initialdir=initial_dir, filetypes=filetypes)
+        if file:
+            var.set(file)
+        self.top.lift()
+        self.top.focus_force()
     def save(self):
         pass
 
