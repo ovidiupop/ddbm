@@ -1,6 +1,6 @@
+from tkinter import messagebox
 from .project_window_ui import ProjectWindowUI
 from .project_utils import ProjectDataManager
-from tkinter import messagebox
 
 class ProjectWindow:
     def __init__(self, parent, project_name, refresh_callback=None, available_dbs=None):

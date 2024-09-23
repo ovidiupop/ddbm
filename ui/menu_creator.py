@@ -4,7 +4,6 @@ import os
 
 from help.help_dialogs import show_info
 
-
 class MenuCreator:
     def __init__(self, root, callbacks):
         self.root = root
@@ -40,7 +39,7 @@ class MenuCreator:
         menubar = tk.Menu(self.root)
         self.root.config(menu=menubar)
 
-        # App
+        # Meniul App
         app_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="App", menu=app_menu, underline=0)
 
@@ -50,7 +49,7 @@ class MenuCreator:
         app_menu.add_command(label="Exit", command=self.root.quit,
                              image=self.icons.get("exit"), compound='left', accelerator="Ctrl+Q")
 
-        # Project
+        # Meniul Project
         project_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Project", menu=project_menu, underline=0)
 
@@ -61,7 +60,7 @@ class MenuCreator:
         project_menu.add_command(label="Delete", command=self.callbacks['delete_project'],
                                  image=self.icons.get("delete"), compound='left', accelerator="Ctrl+D")
 
-        # Actions
+        # Meniul Actions
         actions_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Actions", menu=actions_menu, underline=0)
 
@@ -70,7 +69,7 @@ class MenuCreator:
         actions_menu.add_command(label="Generate Cron Job", command=self.callbacks['open_cron_generator'],
                                  image=self.icons.get("cron"), compound='left', accelerator="Ctrl+G")
 
-        # Help
+        # Meniul Help
         help_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Help", menu=help_menu, underline=0)
 
@@ -90,6 +89,9 @@ class MenuCreator:
         self.root.bind('<Control-i>', lambda event: show_info(self.root))
         self.root.bind('<F1>', lambda event: self.callbacks['show_about']())
 
+        self.root.update_icon = self.icons.get("update")
+        self.root.delete_icon = self.icons.get("delete")
+
     def create_context_menu(self):
         self.context_menu = tk.Menu(self.root, tearoff=0)
         self.context_menu.add_command(label="Update",
@@ -101,6 +103,24 @@ class MenuCreator:
                                       image=self.icons.get("delete"),
                                       compound='left')
 
+    def show_context_menu(self, event):
+        try:
+            self.context_menu.tk_popup(event.x_root, event.y_root)
+            self.context_menu_visible = True
+            self.root.bind("<Button-1>", self.hide_context_menu)
+        except Exception as e:
+            print(f"Error displaying context menu: {e}")
+
+    def hide_context_menu(self, event=None):
+        if self.context_menu_visible:
+            self.context_menu.unpost()
+            self.context_menu_visible = False
+            self.root.unbind("<Button-1>")
+
+    def close_info_window(self, window):
+        window.grab_release()
+        window.destroy()
+        self.root.focus_set()
 
 def create_menu(root, callbacks):
     return MenuCreator(root, callbacks)

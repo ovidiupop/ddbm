@@ -24,6 +24,6 @@
     },
     "app_settings": {
         "backup_folder": "/home/matricks/db_backups",
-        "backup_instances": "5"
+        "backup_instances": "4"
     }
 }

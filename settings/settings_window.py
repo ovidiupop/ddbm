@@ -16,7 +16,8 @@ class SettingsWindow:
             try:
                 save_settings(settings)
                 logger.info("Settings saved successfully")
-                messagebox.showinfo("Success", "Settings saved successfully!")
+                messagebox.showinfo("Success", "Settings saved successfully!",
+                            parent=self.ui.top)
                 self.ui.close()
             except Exception as e:
                 logger.error(f"Error saving settings: {str(e)}")
