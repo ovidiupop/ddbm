@@ -1,7 +1,6 @@
-# db_utils.py
-
 import shutil
 import subprocess
+
 
 def check_db_availability():
     available_dbs = []

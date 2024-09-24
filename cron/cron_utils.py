@@ -4,6 +4,7 @@ import subprocess
 from tkinter import messagebox
 from core.config_manager import load_config
 
+
 class CronUtils:
     @staticmethod
     def generate_cron_job(values):

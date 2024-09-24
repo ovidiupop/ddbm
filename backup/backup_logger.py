@@ -1,6 +1,6 @@
 import logging
-from datetime import datetime
 import os
+
 from core.config_manager import load_config
 
 
@@ -8,7 +8,6 @@ def setup_logger(log_file_path):
     logger = logging.getLogger('backup_logger')
     logger.setLevel(logging.INFO)
 
-    # Creează directorul pentru log-uri dacă nu există
     os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
 
     file_handler = logging.FileHandler(log_file_path)
@@ -32,7 +31,6 @@ def get_log_file_path():
     return os.path.join(backup_folder, 'backup.log')
 
 
-# Setează calea pentru fișierul de log
 log_file = get_log_file_path()
 logger = setup_logger(log_file)
 

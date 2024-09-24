@@ -2,17 +2,14 @@ import tkinter as tk
 from tkinter import ttk, filedialog
 import os
 
+
 class BaseWindow:
     def __init__(self, parent, title, resizable=False):
         self.parent = parent
         self.top = tk.Toplevel(parent)
         self.top.title(title)
         self.top.transient(parent)
-
-        # Setează fereastra ca neredimensionabilă implicit
         self.top.resizable(width=resizable, height=resizable)
-
-        # Eliminăm setările '-topmost' și folosim 'lift' pentru a poziționa fereastra
         self.top.lift(parent)
         self.top.focus_set()
 
@@ -43,7 +40,7 @@ class BaseWindow:
         button_refs = {}
         for idx, (text, command) in enumerate(buttons):
             button = ttk.Button(button_frame, text=text, command=command)
-            button.grid(row=0, column=idx+1, padx=(0, 5))
+            button.grid(row=0, column=idx + 1, padx=(0, 5))
             button_refs[text] = button
 
         return button_frame, button_refs

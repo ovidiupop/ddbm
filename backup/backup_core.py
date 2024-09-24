@@ -4,9 +4,9 @@ import shutil
 import subprocess
 from datetime import datetime
 
+
 def load_config():
-    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    config_path = os.path.join(project_root, 'config', 'config.json')
+    config_path = os.path.join(os.path.expanduser('~'), '.config', 'ddbm', 'config.json')
     try:
         with open(config_path, 'r') as f:
             return json.load(f)
@@ -17,11 +17,13 @@ def load_config():
         print(f"Error decoding JSON from {config_path}")
         return None
 
+
 def get_log_file_path(config):
     app_settings = config.get('app_settings', {})
     default_backup_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'backups')
     backup_dir = app_settings.get('backup_folder', default_backup_dir)
     return os.path.join(backup_dir, 'backup.log')
+
 
 def clean_old_backups(backup_path, max_backups):
     max_backups = int(max_backups)
@@ -35,6 +37,7 @@ def clean_old_backups(backup_path, max_backups):
             os.remove(old_file)
             yield f"Removed old backup: {old_file}"
 
+
 def backup_postgresql(project, backup_dir, timestamp):
     backup_path = os.path.join(backup_dir, "psql", project)
     os.makedirs(backup_path, exist_ok=True)
@@ -44,6 +47,7 @@ def backup_postgresql(project, backup_dir, timestamp):
         yield f"PostgreSQL backup completed: {os.path.basename(backup_file)}"
     except subprocess.CalledProcessError as e:
         yield f"PostgreSQL backup failed for {project}: {str(e)}"
+
 
 def backup_mysql(project, backup_dir, timestamp):
     backup_path = os.path.join(backup_dir, "mysql", project)
@@ -55,6 +59,7 @@ def backup_mysql(project, backup_dir, timestamp):
     except subprocess.CalledProcessError as e:
         yield f"MySQL backup failed for {project}: {str(e)}"
 
+
 def backup_sqlite(project, db_path, backup_dir, timestamp):
     backup_path = os.path.join(backup_dir, "sqlite", project)
     os.makedirs(backup_path, exist_ok=True)
@@ -64,6 +69,7 @@ def backup_sqlite(project, db_path, backup_dir, timestamp):
         yield f"SQLite backup completed: {os.path.basename(backup_file)}"
     except IOError as e:
         yield f"SQLite backup failed for {project}: {str(e)}"
+
 
 def backup_json(project, project_config, backup_dir, timestamp):
     project_path = project_config.get('project_path', '')
@@ -90,7 +96,8 @@ def backup_json(project, project_config, backup_dir, timestamp):
         else:
             command = f"python {manage_path} dumpdata --output {backup_file}"
 
-        result = subprocess.run(command, shell=True, capture_output=True, text=True, cwd=project_path, executable='/bin/bash')
+        result = subprocess.run(command, shell=True, capture_output=True, text=True, cwd=project_path,
+                                executable='/bin/bash')
 
         if result.returncode == 0:
             yield f"JSON backup completed: {os.path.basename(backup_file)}"
@@ -99,6 +106,7 @@ def backup_json(project, project_config, backup_dir, timestamp):
 
     except Exception as e:
         yield f"JSON backup failed for {project}. Exception: {str(e)}"
+
 
 def perform_backup(logger=None):
     try:

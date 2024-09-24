@@ -1,5 +1,5 @@
-import tkinter as tk
 from tkinter import ttk
+
 
 class AutoHideScrollbar(ttk.Scrollbar):
     def set(self, lo, hi):
@@ -8,6 +8,7 @@ class AutoHideScrollbar(ttk.Scrollbar):
         else:
             self.grid()
         ttk.Scrollbar.set(self, lo, hi)
+
 
 class ScrollableTreeview(ttk.Frame):
     def __init__(self, parent, columns, **kwargs):
@@ -43,6 +44,7 @@ class ScrollableTreeview(ttk.Frame):
     def __getattr__(self, attr):
         return getattr(self.tree, attr)
 
+
 def create_projects_frame(parent):
     frame = ttk.LabelFrame(parent, text="Projects", padding="10")
     frame.grid_rowconfigure(0, weight=1)
@@ -68,6 +70,7 @@ def create_projects_frame(parent):
         tree.column(col, width=column_widths[col])
 
     return frame, tree
+
 
 def create_progress_bar(parent):
     progress_bar = ttk.Progressbar(parent, mode='indeterminate', length=300)

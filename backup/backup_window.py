@@ -2,6 +2,7 @@ from .backup_window_ui import BackupWindowUI
 from .backup_manager import execute_backup
 from .backup_core import load_config
 
+
 class BackupWindow:
     def __init__(self, parent):
         self.parent = parent
@@ -39,6 +40,7 @@ class BackupWindow:
         self.ui.top.update_idletasks()
         self.ui.show_results(result_text)
         self.backup_thread = None
+
 
 def show_backup_window(parent):
     backup_window = BackupWindow(parent)

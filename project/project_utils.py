@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox, filedialog
 from core.config_manager import load_project_data, save_project_data, delete_project
 
+
 class ProjectDataManager:
     def __init__(self, project_name):
         self.project_name = project_name
@@ -77,7 +78,8 @@ class ProjectDataManager:
             messagebox.showerror("Error", "Venv path is required when using a virtual environment.", parent=parent)
             return False
         if self.sqlite_var.get() and not self.sqlite_path_var.get().strip():
-            messagebox.showerror("Error", "SQLite database path is required when SQLite backup is enabled.", parent=parent)
+            messagebox.showerror("Error", "SQLite database path is required when SQLite backup is enabled.",
+                                 parent=parent)
             return False
         return True
 

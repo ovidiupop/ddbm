@@ -1,1 +1,20 @@
 **/__pycache__/
+dist/
+build/
+__pycache__/
+
+# PyInstaller files
+*.spec
+
+# Python cache files
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+env/
+
+# IDE specific files (optional, în funcție de ce folosiți)
+.vscode/
+.idea/

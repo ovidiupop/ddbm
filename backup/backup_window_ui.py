@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from ui.base_window import BaseWindow
 
+
 class BackupWindowUI(BaseWindow):
     def __init__(self, parent):
         super().__init__(parent, "Backup Progress", resizable=True)

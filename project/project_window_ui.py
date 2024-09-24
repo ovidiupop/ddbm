@@ -1,6 +1,9 @@
-import tkinter as tk
 from tkinter import ttk
 from ui.base_window import BaseWindow
+from tkinter import ttk
+
+from ui.base_window import BaseWindow
+
 
 class ProjectWindowUI(BaseWindow):
     def __init__(self, parent, data_manager, save_command, cancel_command):

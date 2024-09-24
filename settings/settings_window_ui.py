@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from ui.base_window import BaseWindow
 
+
 class SettingsWindowUI(BaseWindow):
     def __init__(self, parent, save_callback):
         self.backup_folder = tk.StringVar()
@@ -24,13 +25,6 @@ class SettingsWindowUI(BaseWindow):
             ("Cancel", self.close)
         ]
         self.buttons_frame, self.buttons = super().create_button_frame(buttons)
-
-    # def create_button_frame(self, buttons=None):
-    #     buttons = [
-    #         ("Save", self.save_callback),
-    #         ("Cancel", self.close)
-    #     ]
-    #     button_frame, self.buttons = super().create_button_frame(buttons)
 
     def create_path_section(self):
         frame = self.create_labeled_frame(self.main_frame, "Path Settings")

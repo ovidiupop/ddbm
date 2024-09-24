@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from ui.base_window import BaseWindow
 
+
 class CronGeneratorWindowUI(BaseWindow):
     def __init__(self, parent, on_combo_change, open_crontab):
         self.minute = tk.StringVar(value="*")
@@ -44,22 +45,18 @@ class CronGeneratorWindowUI(BaseWindow):
         result_frame = self.create_labeled_frame(self.main_frame, "Generated Cron Job")
         result_frame.columnconfigure(0, weight=1)
 
-        # Creăm un container pentru text și scrollbar
         text_container = ttk.Frame(result_frame)
         text_container.grid(row=0, column=0, sticky="nsew")
         text_container.columnconfigure(0, weight=1)
         text_container.rowconfigure(0, weight=1)
 
-        # Creăm controlul text cu înălțime mărită
         self.result = tk.Text(text_container, height=4, wrap=tk.WORD)
         self.result.grid(row=0, column=0, sticky="nsew")
 
-        # Adăugăm scrollbar vertical
         scrollbar = ttk.Scrollbar(text_container, orient="vertical", command=self.result.yview)
         scrollbar.grid(row=0, column=1, sticky="ns")
         self.result.config(yscrollcommand=scrollbar.set)
 
-        # Facem controlul text read-only
         self.result.config(state=tk.DISABLED)
 
     def create_button_frame(self, buttons=None):

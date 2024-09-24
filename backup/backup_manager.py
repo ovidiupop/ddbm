@@ -7,6 +7,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from backup.backup_core import perform_backup, load_config
 
+
 def setup_logger(log_file):
     logger = logging.getLogger('backup_logger')
     logger.handlers.clear()
@@ -17,6 +18,7 @@ def setup_logger(log_file):
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
     return logger
+
 
 def execute_backup(progress_callback=None, completion_callback=None, use_thread=True):
     config = load_config()
@@ -56,6 +58,7 @@ def execute_backup(progress_callback=None, completion_callback=None, use_thread=
         return thread
     else:
         run_backup()
+
 
 if __name__ == "__main__":
     execute_backup()

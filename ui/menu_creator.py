@@ -5,6 +5,7 @@ import sys
 
 from help.help_dialogs import show_info
 
+
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
     try:
@@ -14,6 +15,7 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
 
     return os.path.join(base_path, relative_path)
+
 
 class MenuCreator:
     def __init__(self, root, callbacks):
@@ -50,7 +52,7 @@ class MenuCreator:
         menubar = tk.Menu(self.root)
         self.root.config(menu=menubar)
 
-        # Meniul App
+        # App
         app_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="App", menu=app_menu, underline=0)
 
@@ -60,7 +62,7 @@ class MenuCreator:
         app_menu.add_command(label="Exit", command=self.root.quit,
                              image=self.icons.get("exit"), compound='left', accelerator="Ctrl+Q")
 
-        # Meniul Project
+        # Project
         project_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Project", menu=project_menu, underline=0)
 
@@ -71,7 +73,7 @@ class MenuCreator:
         project_menu.add_command(label="Delete", command=self.callbacks['delete_project'],
                                  image=self.icons.get("delete"), compound='left', accelerator="Ctrl+D")
 
-        # Meniul Actions
+        # Actions
         actions_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Actions", menu=actions_menu, underline=0)
 
@@ -80,7 +82,7 @@ class MenuCreator:
         actions_menu.add_command(label="Generate Cron Job", command=self.callbacks['open_cron_generator'],
                                  image=self.icons.get("cron"), compound='left', accelerator="Ctrl+G")
 
-        # Meniul Help
+        # Help
         help_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Help", menu=help_menu, underline=0)
 
@@ -132,6 +134,7 @@ class MenuCreator:
         window.grab_release()
         window.destroy()
         self.root.focus_set()
+
 
 def create_menu(root, callbacks):
     return MenuCreator(root, callbacks)

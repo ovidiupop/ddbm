@@ -1,6 +1,6 @@
-import tkinter as tk
 from tkinter import ttk
-from ui.ui_components import create_projects_frame, create_progress_bar
+
+from ui.ui_components import create_projects_frame
 
 
 class MainWindowUI:

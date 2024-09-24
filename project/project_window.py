@@ -2,6 +2,7 @@ from tkinter import messagebox
 from .project_window_ui import ProjectWindowUI
 from .project_utils import ProjectDataManager
 
+
 class ProjectWindow:
     def __init__(self, parent, project_name, refresh_callback=None, available_dbs=None):
         self.parent = parent
@@ -43,6 +44,7 @@ class ProjectWindow:
     def close_window(self):
         self.ui.top.grab_release()
         self.ui.top.destroy()
+
 
 def show_project_window(root, project_name, refresh_callback=None, available_dbs=None):
     project_window = ProjectWindow(root, project_name, refresh_callback, available_dbs)

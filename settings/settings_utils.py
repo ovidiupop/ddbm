@@ -1,6 +1,7 @@
 from core.config_manager import load_config, save_config
 import os
 
+
 def are_settings_configured():
     settings = load_settings()
     required_settings = ['backup_folder', 'backup_instances']
@@ -8,14 +9,17 @@ def are_settings_configured():
         return False
     return validate_settings(settings)
 
+
 def load_settings():
     config = load_config()
     return config.get('app_settings', {})
+
 
 def save_settings(settings):
     config = load_config()
     config['app_settings'] = settings
     save_config(config)
+
 
 def validate_settings(settings):
     backup_folder = settings.get('backup_folder', '')

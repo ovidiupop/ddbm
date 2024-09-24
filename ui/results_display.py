@@ -1,8 +1,7 @@
-# ui/results_display.py
-
 import tkinter as tk
 from tkinter import ttk
 from tkinter.scrolledtext import ScrolledText
+
 
 class ResultsDisplay(ttk.Frame):
     def __init__(self, parent):
