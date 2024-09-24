@@ -8,16 +8,13 @@ class BaseWindow:
         self.top = tk.Toplevel(parent)
         self.top.title(title)
         self.top.transient(parent)
-        self.top.grab_set()
 
         # Setează fereastra ca neredimensionabilă implicit
         self.top.resizable(width=resizable, height=resizable)
 
-        # Forțează fereastra să rămână deasupra ferestrei părinte
-        self.top.attributes('-topmost', True)
-        self.parent.attributes('-topmost', True)
-        self.parent.attributes('-topmost', False)
-        self.top.focus_force()
+        # Eliminăm setările '-topmost' și folosim 'lift' pentru a poziționa fereastra
+        self.top.lift(parent)
+        self.top.focus_set()
 
         self.main_frame = ttk.Frame(self.top, padding="20")
         self.main_frame.grid(row=0, column=0, sticky="nsew")
@@ -41,12 +38,12 @@ class BaseWindow:
     def create_button_frame(self, buttons):
         button_frame = ttk.Frame(self.main_frame)
         button_frame.grid(row=100, column=0, sticky="ew", pady=(20, 0))
-        button_frame.grid_columnconfigure(0, weight=1)  # Această coloană va "împinge" butoanele spre dreapta
+        button_frame.grid_columnconfigure(0, weight=1)
 
         button_refs = {}
         for idx, (text, command) in enumerate(buttons):
             button = ttk.Button(button_frame, text=text, command=command)
-            button.grid(row=0, column=idx+1, padx=(0, 5))  # Începem de la coloana 1
+            button.grid(row=0, column=idx+1, padx=(0, 5))
             button_refs[text] = button
 
         return button_frame, button_refs
@@ -62,12 +59,12 @@ class BaseWindow:
         width = max(700, self.top.winfo_reqwidth())
         height = self.top.winfo_reqheight()
         self.top.geometry(f"{width}x{height}")
-        if not self.top.resizable()[0]:  # Verifică dacă fereastra este redimensionabilă
+        if not self.top.resizable()[0]:
             self.top.minsize(width, height)
             self.top.maxsize(width, height)
 
     def create_path_input(self, parent, label, var, command=None, row=0, required=False):
-        parent.grid_columnconfigure(1, weight=1)  # Permite coloanei 1 (input) să se extindă
+        parent.grid_columnconfigure(1, weight=1)
 
         label_text = f"{label} {'*' if required else ''}"
         ttk.Label(parent, text=label_text).grid(row=row, column=0, sticky='e', padx=(0, 5), pady=5)
@@ -91,7 +88,6 @@ class BaseWindow:
         folder = filedialog.askdirectory(parent=self.top, initialdir=initial_dir)
         if folder:
             var.set(folder)
-        self.keep_on_top()
 
     def browse_file(self, var, filetypes=None):
         initial_dir = os.path.dirname(var.get())
@@ -109,13 +105,6 @@ class BaseWindow:
         )
         if file:
             var.set(file)
-        self.keep_on_top()
-
-    def keep_on_top(self):
-        self.top.attributes('-topmost', True)
-        self.top.attributes('-topmost', False)
-        self.top.lift()
-        self.top.focus_force()
 
     def save(self):
         pass

@@ -18,10 +18,12 @@ def setup_logger(log_file):
     logger.addHandler(file_handler)
     return logger
 
-def execute_backup(progress_callback, completion_callback, use_thread=True):
+def execute_backup(progress_callback=None, completion_callback=None, use_thread=True):
     config = load_config()
     if config is None:
-        completion_callback(None, "Failed to load configuration")
+        error_message = "Failed to load configuration"
+        if completion_callback:
+            completion_callback(None, error_message)
         return
 
     backup_dir = config.get('app_settings', {}).get('backup_folder', 'backups')
@@ -36,16 +38,19 @@ def execute_backup(progress_callback, completion_callback, use_thread=True):
         try:
             output = []
             for message in perform_backup():
-                output.append(message)
                 logger.info(message)
-                progress_callback(message)
-            completion_callback("\n".join(output), None)
+                if progress_callback:
+                    progress_callback(message)
+                output.append(message)
+            if completion_callback:
+                completion_callback("\n".join(output), None)
         except Exception as e:
             error_message = f"Error occurred during backup: {str(e)}"
             logger.error(error_message)
-            completion_callback(None, error_message)
+            if completion_callback:
+                completion_callback(None, error_message)
 
-    if use_thread:
+    if use_thread and progress_callback:
         thread = threading.Thread(target=run_backup)
         thread.start()
         return thread
@@ -53,26 +58,4 @@ def execute_backup(progress_callback, completion_callback, use_thread=True):
         run_backup()
 
 if __name__ == "__main__":
-    config = load_config()
-    if config is None:
-        print("Failed to load configuration")
-        sys.exit(1)
-
-    backup_dir = config.get('app_settings', {}).get('backup_folder', 'backups')
-    if not os.path.isabs(backup_dir):
-        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        backup_dir = os.path.join(project_root, backup_dir)
-
-    log_file = os.path.join(backup_dir, 'backup.log')
-    logger = setup_logger(log_file)
-
-    def print_progress(message):
-        pass
-
-    def print_completion(output, error):
-        if error:
-            logger.error(f"Backup failed: {error}")
-        else:
-            logger.info("Backup completed successfully")
-
-    execute_backup(print_progress, print_completion, use_thread=False)
+    execute_backup()

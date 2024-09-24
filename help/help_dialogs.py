@@ -1,6 +1,17 @@
 import os
 import tkinter as tk
 from tkinter import ttk, scrolledtext
+import sys
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 def create_toplevel(parent, title, geometry=None):
     top = tk.Toplevel(parent)
@@ -10,7 +21,6 @@ def create_toplevel(parent, title, geometry=None):
     top.transient(parent)
     top.grab_set()
     return top
-
 
 def show_about(parent):
     about_window = create_toplevel(parent, "About", "300x200")
@@ -25,7 +35,6 @@ def show_about(parent):
 
     ttk.Button(about_frame, text="OK", command=about_window.destroy).pack(pady=(20, 0))
 
-
 def show_info(parent):
     info_window = create_toplevel(parent, "Info", "600x400")
     info_window.minsize(400, 300)
@@ -33,15 +42,15 @@ def show_info(parent):
     text_widget = scrolledtext.ScrolledText(info_window, wrap=tk.WORD)
     text_widget.pack(expand=True, fill='both', padx=10, pady=10)
 
-    # Path to the info.txt file in the help folder
-    info_file_path = os.path.join('help', 'info.txt')
+    # Path to the info.txt file using resource_path
+    info_file_path = resource_path(os.path.join('help', 'info.txt'))
 
     try:
         with open(info_file_path, 'r', encoding='utf-8') as file:
             content = file.read()
             text_widget.insert(tk.END, content)
     except FileNotFoundError:
-        text_widget.insert(tk.END, "The info.txt file was not found.")
+        text_widget.insert(tk.END, f"The info.txt file was not found at {info_file_path}.")
     except Exception as e:
         text_widget.insert(tk.END, f"An error occurred while reading the file: {str(e)}")
 

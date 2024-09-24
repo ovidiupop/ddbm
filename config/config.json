@@ -16,8 +16,8 @@
         }
     },
     "cron_settings": {
-        "minute": "0",
-        "hour": "11",
+        "minute": "*",
+        "hour": "*",
         "day": "*",
         "month": "*",
         "weekday": "*"

@@ -7,6 +7,7 @@ class CronGeneratorWindow:
     def __init__(self, parent):
         self.utils = CronUtils()
         self.ui = CronGeneratorWindowUI(parent, self.on_combo_change, self.open_crontab)
+        self.ui.top.transient(parent)  # Setează fereastra ca transient pentru părinte
         self.load_config()
 
     def load_config(self):
@@ -35,4 +36,4 @@ class CronGeneratorWindow:
 
 def show_cron_generator(parent):
     cron_generator = CronGeneratorWindow(parent)
-    cron_generator.ui.top.wait_window()
+    parent.wait_window(cron_generator.ui.top)

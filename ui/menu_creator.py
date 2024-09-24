@@ -1,8 +1,19 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 import os
+import sys
 
 from help.help_dialogs import show_info
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 class MenuCreator:
     def __init__(self, root, callbacks):
@@ -21,7 +32,7 @@ class MenuCreator:
 
     def load_icon(self, name):
         try:
-            icon_path = os.path.join("icons", f"{name}.png")
+            icon_path = resource_path(os.path.join("icons", f"{name}.png"))
             if os.path.exists(icon_path):
                 image = Image.open(icon_path)
                 image = image.resize((16, 16), Image.LANCZOS)
