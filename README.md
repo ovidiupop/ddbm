@@ -42,7 +42,7 @@ Before installing DDBM, ensure you have the following:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/ddbm.git
+   git clone https://github.com/ovidiupop/ddbm.git
    cd ddbm
    pip install -r requirements.txt
    python ddbm.py
