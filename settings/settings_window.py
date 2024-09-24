@@ -5,6 +5,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class SettingsWindow:
     def __init__(self, parent):
         self.ui = SettingsWindowUI(parent, self.save)
@@ -17,7 +18,7 @@ class SettingsWindow:
                 save_settings(settings)
                 logger.info("Settings saved successfully")
                 messagebox.showinfo("Success", "Settings saved successfully!",
-                            parent=self.ui.top)
+                                    parent=self.ui.top)
                 self.ui.close()
             except Exception as e:
                 logger.error(f"Error saving settings: {str(e)}")
@@ -34,6 +35,7 @@ class SettingsWindow:
         except Exception as e:
             logger.error(f"Error loading current settings: {str(e)}")
             messagebox.showerror("Error", f"An error occurred while loading settings: {str(e)}")
+
 
 def show_settings_window(parent):
     settings_window = SettingsWindow(parent)
