@@ -44,8 +44,10 @@ Before installing DDBM, ensure you have the following:
    ```bash
    git clone https://github.com/ovidiupop/ddbm.git
    cd ddbm
+   python3.x -m venv venv
+   source venv/bin/activate
    pip install -r requirements.txt
-   python ddbm.py
+   python main.py
 
 ### Binary Installation
 
